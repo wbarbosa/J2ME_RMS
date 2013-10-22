@@ -5,6 +5,8 @@
 
 package com.j2me.rms;
 
+import org.kxml2.io.KXmlParser;
+
 /**
  *
  * @author willian
@@ -75,4 +77,11 @@ public abstract class Entity {
 
         return value;
     }
+    
+    /**
+     *
+     * @param parser
+     */
+    public abstract void parse(KXmlParser parser);
+    
 }
