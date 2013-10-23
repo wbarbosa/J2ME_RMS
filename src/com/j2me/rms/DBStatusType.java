@@ -14,18 +14,22 @@ public final class DBStatusType {
      *
      */
     public static final int SYNCHRONIZED = 0;
+    
     /**
      *
      */
     public static final int INSERTED = 1;
+    
     /**
      *
      */
     public static final int UPDATED = 2;
+    
     /**
      *
      */
     public static final int DELETED = 3;
+    
     /**
      *
      */

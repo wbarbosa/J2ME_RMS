@@ -26,18 +26,18 @@ public class StatusRMS {
     private Form frmStatusRMS;
     private CommandListener commandListener;
     private StringItem[] arrayStringItem;
-    private int indexStringItem = 1;
     private int bytesTotalDisponivel = 0;
     private int bytesTotalUsado = 0;
     private int versionRMS = 0;
 
     /**
      * Returns an initiliazed instance of frmStatusRMS component.
+     *
      * @return the initialized component instance
      */
     public Form getFrmStatusRMS() {
         if (frmStatusRMS == null) {
-            frmStatusRMS = new Form("Banco de Dados");
+            frmStatusRMS = new Form("Database");
 
             frmStatusRMS.addCommand(getCmdVoltar());
             frmStatusRMS.setCommandListener(this.commandListener);
@@ -61,13 +61,14 @@ public class StatusRMS {
 
     /**
      * Returns an initiliazed instance of cmdCancelar component.
+     *
      * @return the initialized component instance
      */
     public Command getCmdVoltar() {
         if (cmdVoltar == null) {
             // write pre-init user code here
             cmdVoltar = new Command("Voltar", Command.BACK, 0);
-        // write post-init user code here
+            // write post-init user code here
         }
         return cmdVoltar;
     }
@@ -76,17 +77,17 @@ public class StatusRMS {
         this.commandListener = commandListener;
     }
 
-    private void loadStringItem(){
+    private void loadStringItem() {
         if (arrayStringItem == null) {
             arrayStringItem = new StringItem[1];
         }
 
-        if (indexStringItem >= arrayStringItem.length) {
+        if (arrayStringItem.length <= 1) {
             resizeStringItem();
         }
     }
 
-    public void readSiseRMS(){
+    public void readSiseRMS() {
         loadStringItem();
 
         String[] names = RecordStore.listRecordStores();
@@ -103,7 +104,7 @@ public class StatusRMS {
                 bytesTotalDisponivel = bytesDisponivel;
                 bytesTotalUsado = bytesTotalUsado + (bytesUsado == 0 ? 1 : bytesUsado);
 
-                if(versionRMS == 0){
+                if (versionRMS == 0) {
                     versionRMS = entityStore.getVersion();
                 }
             } catch (RecordStoreFullException ex) {
@@ -114,7 +115,7 @@ public class StatusRMS {
                 ex.printStackTrace();
             }
 
-            if(entityStore != null){
+            if (entityStore != null) {
                 try {
                     entityStore.closeRecordStore();
                 } catch (RecordStoreNotOpenException ex) {
@@ -130,8 +131,8 @@ public class StatusRMS {
     private void resizeStringItem() {
         StringItem[] stringItemAux = arrayStringItem;
 
-        arrayStringItem =
-                new StringItem[stringItemAux.length + (stringItemAux.length / 2)];
+        arrayStringItem
+                = new StringItem[stringItemAux.length + (stringItemAux.length / 2)];
 
         for (int x = 0, y = stringItemAux.length; x < y; x++) {
             arrayStringItem[x] = stringItemAux[x];
@@ -140,69 +141,69 @@ public class StatusRMS {
 
     private void calcularKBytesTotal() {
         StringBuffer stringSize = new StringBuffer();
-        int kBytesTotalUsado =
-                bytesTotalUsado / 1024 == 0 ? 1 : bytesTotalUsado / 1024;
+        int kBytesTotalUsado
+                = bytesTotalUsado / 1024 == 0 ? 1 : bytesTotalUsado / 1024;
         int kBytesTotalDisponivel = bytesTotalDisponivel / 1024;
 
-        arrayStringItem[0] =
-                new StringItem("Status do Banco de Dados ", "");
+        arrayStringItem[0]
+                = new StringItem("Status of the Database ", "");
 
         arrayStringItem[0].setLayout(StringItem.LAYOUT_LEFT | StringItem.LAYOUT_NEWLINE_AFTER | Item.LAYOUT_EXPAND);
 
-        stringSize.append("\r\nEspa\u00E7o Dispon\u00EDvel: ");
-        
-        if(kBytesTotalDisponivel > 1024){
+        stringSize.append("\r\nAvailable Space: ");
+
+        if (kBytesTotalDisponivel > 1024) {
             int mBytesTotalDisponivel = kBytesTotalDisponivel / 1024;
             stringSize.append(mBytesTotalDisponivel);
             stringSize.append(" MByte(s)");
 
-            int resto = (kBytesTotalDisponivel - (mBytesTotalDisponivel*1024));
+            int resto = (kBytesTotalDisponivel - (mBytesTotalDisponivel * 1024));
 
-            if(resto > 0){
+            if (resto > 0) {
                 stringSize.append(" e ");
                 stringSize.append(resto);
                 stringSize.append(" KByte(s)");
             }
 
             stringSize.append(".");
-        }else{
-            if(kBytesTotalDisponivel == 0){
+        } else {
+            if (kBytesTotalDisponivel == 0) {
                 stringSize.append(bytesTotalDisponivel);
                 stringSize.append(" Byte(s).");
-            }else{
+            } else {
                 stringSize.append(kBytesTotalDisponivel);
                 stringSize.append(" KByte(s).");
             }
         }
 
         stringSize.append("\n");
-        stringSize.append("Espa\u00E7o Usado: ");
+        stringSize.append("Used Space: ");
 
-        if(kBytesTotalUsado > 1024){
+        if (kBytesTotalUsado > 1024) {
             int mBytesTotalUsado = kBytesTotalUsado / 1024;
             stringSize.append(mBytesTotalUsado);
             stringSize.append(" MByte(s)");
 
-            int resto = (kBytesTotalUsado - (mBytesTotalUsado*1024));
+            int resto = (kBytesTotalUsado - (mBytesTotalUsado * 1024));
 
-            if(resto > 0){
+            if (resto > 0) {
                 stringSize.append(" e ");
                 stringSize.append(resto);
                 stringSize.append(" KByte(s)");
             }
 
             stringSize.append(".");
-        }else{
-            if(kBytesTotalUsado == 0){
+        } else {
+            if (kBytesTotalUsado == 0) {
                 stringSize.append(bytesTotalUsado);
                 stringSize.append(" Byte(s).");
-            }else{
+            } else {
                 stringSize.append(kBytesTotalUsado);
                 stringSize.append(" KByte(s)");
 
-                int resto = (bytesTotalUsado - (kBytesTotalUsado*1024));
+                int resto = (bytesTotalUsado - (kBytesTotalUsado * 1024));
 
-                if(resto > 0){
+                if (resto > 0) {
                     stringSize.append(" e ");
                     stringSize.append(resto);
                     stringSize.append(" Byte(s)");
@@ -213,12 +214,11 @@ public class StatusRMS {
         }
 
         /*
-        if(versionRMS > 0){
-            stringSize.append("\r\n");
-            stringSize.append("Vers\u00E3o: ");
-            stringSize.append(versionRMS);
-        }*/
-
+         if(versionRMS > 0){
+         stringSize.append("\r\n");
+         stringSize.append("Vers\u00E3o: ");
+         stringSize.append(versionRMS);
+         }*/
         arrayStringItem[0].setText(stringSize.toString());
     }
 }

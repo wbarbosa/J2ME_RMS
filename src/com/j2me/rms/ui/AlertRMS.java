@@ -17,7 +17,7 @@ public class AlertRMS {
 
     private static Alert alert;
     private static String textAlert =
-            "N\u00E3o h\u00E1 mais espa\u00E7o para armazenamento de dados.";
+            "There is no more space for data storage.";
     private static Display displayApp;
     private static Displayable current;
 
@@ -35,7 +35,7 @@ public class AlertRMS {
 
     public static void show() {
         if (alert == null) {
-            alert = new Alert("Armazenamento de Dados");
+            alert = new Alert("Data Storage");
         }
 
         alert.setString(textAlert);

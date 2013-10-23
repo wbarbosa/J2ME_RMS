@@ -6,5 +6,9 @@
             <name>J2ME RMS</name>
             <minimum-ant-version>1.6</minimum-ant-version>
         </data>
+        <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+            <word>initiliazed</word>
+            <word>registros</word>
+        </spellchecker-wordlist>
     </configuration>
 </project>

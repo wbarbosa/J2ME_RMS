@@ -2,12 +2,16 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.j2me.rms;
 
+import com.j2me.rms.filter.RecordFilterKey;
+import com.j2me.rms.filter.RecordFilterNotSynchronized;
+import com.j2me.rms.filter.RecordFilterSynchronized;
 import com.j2me.rms.ui.AlertRMS;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import javax.microedition.rms.InvalidRecordIDException;
@@ -17,11 +21,13 @@ import javax.microedition.rms.RecordFilter;
 import javax.microedition.rms.RecordStore;
 import javax.microedition.rms.RecordStoreException;
 import javax.microedition.rms.RecordStoreNotOpenException;
+
 /**
  *
  * @author willian
  */
-public abstract class DAO{
+public abstract class DAO {
+
     private DataBase dataBase;
     private RecordEnumeration reEntity;
     private RecordEnumeration reEntityIndex;
@@ -31,34 +37,35 @@ public abstract class DAO{
     protected Entity[] resultSet;
 
     private String nameEntity;
+
     /**
      *
      * @param nameEntity
      */
-    public DAO(String nameEntity){
-        try{
+    public DAO(String nameEntity) {
+        try {
             this.nameEntity = nameEntity;
             this.dataBase = new DataBase(this.nameEntity, true);
             this.openTable = this.dataBase.isOpenDataBase();
-        }catch(Exception ex){
-            AlertRMS.setTextAlert("Contructor "+ nameEntity +" ERROR: ");
+        } catch (Exception ex) {
+            AlertRMS.setTextAlert("Contructor " + nameEntity + " ERROR: ");
             AlertRMS.setTextAlertException(ex.getMessage());
             AlertRMS.show();
         }
 
-        /*
-        System.out.println("nome: "+getName());
-        System.out.println("tamanho: "+getSizeAvailableBytes());
-        System.out.println("usado: "+getSizeBytes());
-        System.out.println("registros totais: "+getSizeAll());
-         */
+        //#mdebug info
+        System.out.println("nome: " + getName());
+        System.out.println("tamanho: " + getSizeAvailableBytes());
+        System.out.println("usado: " + getSizeBytes());
+        System.out.println("registros totais: " + getSizeAll());
+        //#enddebug
     }
 
     /**
      *
      */
-    public void close(){
-        if(openTable){
+    public void close() {
+        if (openTable) {
             this.dataBase.closeDataBase();
         }
     }
@@ -90,14 +97,16 @@ public abstract class DAO{
             AlertRMS.setTextAlert("getLastModified ERROR:");
             AlertRMS.setTextAlertException(ex.getMessage());
             AlertRMS.show();
+            //#mdebug error
             ex.printStackTrace();
+            //#enddebug
             return new Date(0);
         }
     }
 
     /**
      *
-     * @return Retorna o nome da entidade
+     * @return Returns the name of the entity
      */
     public String getNameEntity() {
         return this.nameEntity;
@@ -114,7 +123,9 @@ public abstract class DAO{
             AlertRMS.setTextAlert("getName ERROR: ");
             AlertRMS.setTextAlertException(ex.getMessage());
             AlertRMS.show();
+            //#mdebug error
             ex.printStackTrace();
+            //#enddebug
             return "";
         }
     }
@@ -123,10 +134,10 @@ public abstract class DAO{
      *
      * @return
      */
-    public int getSize(){
-        if(resultSet != null){
+    public int getSize() {
+        if (resultSet != null) {
             return resultSet.length;
-        }else{
+        } else {
             return 0;
         }
     }
@@ -142,14 +153,17 @@ public abstract class DAO{
             AlertRMS.setTextAlert("getSizeAll ERROR: ");
             AlertRMS.setTextAlertException(ex.getMessage());
             AlertRMS.show();
+            //#mdebug error
             ex.printStackTrace();
+            //#enddebug
             return 0;
         }
     }
 
     /**
      *
-     * @return Returns the amount of space, in bytes, that the record store occupies.
+     * @return Returns the amount of space, in bytes, that the record store
+     * occupies.
      */
     public int getSizeBytes() {
         try {
@@ -158,14 +172,17 @@ public abstract class DAO{
             AlertRMS.setTextAlert("getSizeBytes ERROR: ");
             AlertRMS.setTextAlertException(ex.getMessage());
             AlertRMS.show();
+            //#mdebug error
             ex.printStackTrace();
+            //#enddebug
             return 0;
         }
     }
 
     /**
      *
-     * @return Returns the amount of additional room (in bytes) available for this record store to grow.
+     * @return Returns the amount of additional room (in bytes) available for
+     * this record store to grow.
      */
     public int getSizeAvailableBytes() {
         try {
@@ -174,7 +191,9 @@ public abstract class DAO{
             AlertRMS.setTextAlert("getSizeAvailableBytes ERROR: ");
             AlertRMS.setTextAlertException(ex.getMessage());
             AlertRMS.show();
+            //#mdebug error
             ex.printStackTrace();
+            //#enddebug
             return 0;
         }
     }
@@ -190,7 +209,9 @@ public abstract class DAO{
             AlertRMS.setTextAlert("getVersion ERROR: ");
             AlertRMS.setTextAlertException(ex.getMessage());
             AlertRMS.show();
+            //#mdebug error
             ex.printStackTrace();
+            //#enddebug
             return 0;
         }
     }
@@ -201,9 +222,9 @@ public abstract class DAO{
      */
     public boolean hasNextElement() {
         boolean existNextElement = false;
-        if(resultSet != null){
-            if(resultSet.length > 0){
-                if(indexResultSet < resultSet.length){
+        if (resultSet != null) {
+            if (resultSet.length > 0) {
+                if (indexResultSet < resultSet.length) {
                     existNextElement = true;
                 }
             }
@@ -216,7 +237,7 @@ public abstract class DAO{
      *
      * @return
      */
-    public Entity nextElement(){
+    public Entity nextElement() {
         Entity entity = resultSet[indexResultSet];
         indexResultSet++;
 
@@ -224,17 +245,18 @@ public abstract class DAO{
     }
 
     /**
-     * Buscar registros na entidade do RMS
+     * Search records in the entity RMS
+     *
      * @param recordFilter
      * @param recordComparator
      */
-    protected void search(RecordFilter recordFilter, RecordComparator recordComparator){
+    protected void search(RecordFilter recordFilter, RecordComparator recordComparator) {
         try {
             clearResultSet();
 
             RecordStore store = getDataBase().getRecordStore();
 
-            if(store != null){
+            if (store != null) {
                 reEntity = store.enumerateRecords(recordFilter, recordComparator, false);
                 reEntityIndex = store.enumerateRecords(recordFilter, recordComparator, false);
 
@@ -242,7 +264,7 @@ public abstract class DAO{
 
                 int countEntity = 0;
 
-                while(reEntity.hasNextElement()){
+                while (reEntity.hasNextElement()) {
                     try {
                         ByteArrayInputStream byteArrayInputStream = null;
                         DataInputStream dataInputStream = null;
@@ -259,22 +281,30 @@ public abstract class DAO{
                         AlertRMS.setTextAlert("Search ERROR: ");
                         AlertRMS.setTextAlertException(ex.getMessage());
                         AlertRMS.show();
+                        //#mdebug error
                         ex.printStackTrace();
+                        //#enddebug
                     } catch (InvalidRecordIDException ex) {
                         AlertRMS.setTextAlert("Search ERROR: ");
                         AlertRMS.setTextAlertException(ex.getMessage());
                         AlertRMS.show();
+                        //#mdebug error
                         ex.printStackTrace();
+                        //#enddebug
                     } catch (RecordStoreNotOpenException ex) {
                         AlertRMS.setTextAlert("Search ERROR: ");
                         AlertRMS.setTextAlertException(ex.getMessage());
                         AlertRMS.show();
+                        //#mdebug error
                         ex.printStackTrace();
+                        //#enddebug
                     } catch (RecordStoreException ex) {
                         AlertRMS.setTextAlert("Search ERROR: ");
                         AlertRMS.setTextAlertException(ex.getMessage());
                         AlertRMS.show();
+                        //#mdebug error
                         ex.printStackTrace();
+                        //#enddebug
                     }
                 }
             }
@@ -282,93 +312,105 @@ public abstract class DAO{
             AlertRMS.setTextAlert("Search ERROR: ");
             AlertRMS.setTextAlertException(ex.getMessage());
             AlertRMS.show();
+            //#mdebug error
             ex.printStackTrace();
+            //#enddebug
         } catch (RecordStoreException ex) {
             AlertRMS.setTextAlert("Search ERROR: ");
             AlertRMS.setTextAlertException(ex.getMessage());
             AlertRMS.show();
+            //#mdebug error
             ex.printStackTrace();
+            //#enddebug
         }
     }
 
     /**
-     * Buscar todos os registros
+     * Search all records
      */
-    public void searchAll(){
+    public void searchAll() {
         searchAll(false);
     }
 
     /**
-     * Buscar todos os registros
+     * Search all records
+     *
      * @param comparator
      */
-    public void searchAll(RecordComparator comparator){
+    public void searchAll(RecordComparator comparator) {
         searchAll(false, comparator);
     }
 
     /**
-     * Buscar todos os registros
-     * @param orderByIndex - Ordenar os registros pelo índice gerado para registro
+     * Search all records
+     *
+     * @param orderByIndex - Sort the records generated by the index for the
+     * record
      */
-    public void searchAll(boolean orderByIndex){
+    public void searchAll(boolean orderByIndex) {
         searchAll(orderByIndex, null);
     }
 
     /**
-     * Buscar todos os registros
-     * @param orderByIndex - Ordenar os registros pelo índice gerado para registro
+     * Search all records
+     *
+     * @param orderByIndex - Sort the records generated by the index for the
+     * record
      * @param comparator
      */
-    public void searchAll(boolean orderByIndex, RecordComparator comparator){
-        if(orderByIndex){
+    public void searchAll(boolean orderByIndex, RecordComparator comparator) {
+        if (orderByIndex) {
             search(null, comparator);
-        }else{
+        } else {
             search(null, comparator);
         }
     }
 
     /**
-     * Buscar registros pela chave
-     * @param userId
+     * Search records by key
+     *
+     * @param entity
      */
-    public void searchKey(Entity entity){
+    public void searchKey(Entity entity) {
         search(new RecordFilterKey(entity), null);
     }
 
     /**
-     * Procurar os registros não sincronizados
+     * Find all records not synchronized
      */
-    public void searchNotSynchronized(){
+    public void searchNotSynchronized() {
         searchNotSynchronized(-1);
     }
 
     /**
-     * Procurar os registros não sincronizados
-     * @param changeStatusAs - Seta o Status que os registros encontrados deverão ficar
+     * Find all records not synchronized
+     *
+     * @param changeStatusAs - Sets the status that the records found will be
      */
-    public void searchNotSynchronized(int changeStatusAs){
-        search(new RecordFilterNotSynchronized(), null);
-        if(changeStatusAs != -1){
+    public void searchNotSynchronized(int changeStatusAs) {
+        search(new RecordFilterNotSynchronized(this), null);
+        if (changeStatusAs != -1) {
             synchronizedData(changeStatusAs, false);
         }
     }
 
     /**
-     * Seta o Status para os registros não sincronizados deverão ficar
+     * Sets the status for the records should not be synchronized
+     *
      * @param changeStatusAs
      */
-    public void synchronizedData(int changeStatusAs){
+    public void synchronizedData(int changeStatusAs) {
         this.synchronizedData(changeStatusAs, true);
     }
 
-    private void synchronizedData(int changeStatusAs, boolean search){
-        if(search) {
-            search(new RecordFilterNotSynchronized(), null);
-        }else{
+    private void synchronizedData(int changeStatusAs, boolean search) {
+        if (search) {
+            search(new RecordFilterNotSynchronized(this), null);
+        } else {
             resetResultSet();
         }
 
-        while(hasNextElement()){
+        while (hasNextElement()) {
             Entity entity = nextElement();
 
             entity.setMBStatus(changeStatusAs);
@@ -378,11 +420,12 @@ public abstract class DAO{
     }
 
     /**
-     * Insere o registro no RMS
-     * @param userId
+     * Inserts the record in RMS
+     *
+     * @param entity
      * @return
      */
-    public int insert(Entity entity){
+    public int insert(Entity entity) {
         int id = -1;
         byte[] dados = entityToByte(entity);
 
@@ -394,25 +437,21 @@ public abstract class DAO{
     }
 
     /**
-     * Insere o registro existente no RMS
-     * @param userId
+     * Inserts the existing record in RMS
+     *
+     * @param entity
      * @return
      */
-    public boolean update(Entity entity){
-        if(delete(entity) != -1){
-            if(insert(entity) != -1){
+    public boolean update(Entity entity) {
+        if (delete(entity) != -1) {
+            if (insert(entity) != -1) {
                 return true;
-            }else{
+            } else {
                 return false;
             }
-        }else{
+        } else {
             return false;
         }
-        /*
-         * byte[] dados = entityToByte(userId);
-
-        return getDataBase().updateRecord(userId.getIndexRMS(), dados, 0, dados.length);
-         */
     }
 
     private boolean deleteRMS(int indexRMS) {
@@ -422,156 +461,119 @@ public abstract class DAO{
             AlertRMS.setTextAlert("Delete ERROR: ");
             AlertRMS.setTextAlertException(ex.getMessage());
             AlertRMS.show();
+            //#mdebug error
             ex.printStackTrace();
+            //#enddebug
             return false;
         }
     }
 
     /**
-     * Exclui o registro existentes no RMS
-     * @param userId
+     * Deletes the existing record in RMS
+     *
+     * @param entity
      * @return
      */
-    public int delete(Entity entity){
-        if(deleteRMS(entity.getIndexRMS())){
+    public int delete(Entity entity) {
+        if (deleteRMS(entity.getIndexRMS())) {
             return entity.getIndexRMS();
-        }else{
+        } else {
             return -1;
         }
     }
 
     /**
-     * Exclui os registros sincronizados existentes no RMS
+     * Excludes records synchronized existing RMS
      */
-    public void deleteSynchronized(){
-        search(new RecordFilterSynchronized(), null);
-        while(hasNextElement()){
+    public void deleteSynchronized() {
+        search(new RecordFilterSynchronized(this), null);
+        while (hasNextElement()) {
             delete(nextElement());
         }
     }
 
     /**
-     * Exclui todos os registros desse Entidade existentes no RMS
+     * Deletes all records of that entity existing in RMS
      */
-    public void deleteAll(){
+    public void deleteAll() {
         try {
             searchAll(false, null);
-            while(hasNextElement()){
+            while (hasNextElement()) {
                 deleteRMS(nextElement().getIndexRMS());
             }
-        } catch (Exception ex){
+        } catch (Exception ex) {
             AlertRMS.setTextAlert("DeleteAll ERROR: ");
             AlertRMS.setTextAlertException(ex.getMessage());
             AlertRMS.show();
+            //#mdebug error
             ex.printStackTrace();
+            //#enddebug
         }
     }
+    
+    public abstract Entity byteToEntity(DataInputStream dataInputStream);
 
-    /*
-     * private void verifyInsert(Entity userId, int indexRMS){
-     *   if(userId.getIndexRMS() == -1){
-     *       userId.setIndexRMS(indexRMS);
-     *       //delete(userId);
-     *       //insert(userId);
-     *       //updateRMS(userId);
-     *       update(userId);
-     *   }
-     * }
-     */
+    public abstract void entityToByte(DataOutputStream data, Entity entity);
 
-    protected abstract Entity byteToEntity(DataInputStream dataInputStream);
-    protected abstract byte[] entityToByte(Entity entity);
+    protected byte[] entityToByte(Entity entity) {
+        try {
+            ByteArrayOutputStream byteArray
+                    = new ByteArrayOutputStream(); //cria um novo byte
+            DataOutputStream data
+                    = new DataOutputStream(byteArray);
 
+            entityToByte(data, entity);
+
+            data.flush();
+
+            byte[] dados = byteArray.toByteArray();
+
+            byteArray.close();
+            data.close();
+
+            return dados;
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+    
     /**
-     * Limpa o ResultSet para futuras buscas
+     * Clears the ResultSet for future searches
      */
-    public void clearResultSet(){
+    public void clearResultSet() {
         reEntity = null;
         reEntityIndex = null;
         resultSet = null;
         indexResultSet = 0;
     }
 
-    private void resetResultSet(){
+    private void resetResultSet() {
         indexResultSet = 0;
     }
 
-    private class RecordFilterKey implements RecordFilter {
-        private Entity entity;
-
-        public RecordFilterKey(Entity entity) {
-            this.entity = entity;
-        }
-
-        public boolean matches(byte[] persisted) {
-            return entity.getKey().equals(entity.getKey(persisted));
-        }
-    }
-
-    private class RecordFilterSynchronized implements RecordFilter {
-        public RecordFilterSynchronized() {}
-
-        public boolean matches(byte[] persisted) {
-            try {
-                ByteArrayInputStream bis = new ByteArrayInputStream(persisted);
-                java.io.DataInputStream dis = new java.io.DataInputStream(bis);
-
-                Entity entity = byteToEntity(dis);
-
-                return entity.getMBStatus() == DBStatusType.SYNCHRONIZED;
-            } catch (Exception ex) {
-                AlertRMS.setTextAlert("RecordFilterSinchronized ERROR: ");
-                AlertRMS.setTextAlertException(ex.getMessage());
-                AlertRMS.show();
-                ex.printStackTrace();
-                return false;
-            }
-        }
-    }
-
-    private class RecordFilterNotSynchronized implements RecordFilter {
-        public RecordFilterNotSynchronized() {}
-
-        public boolean matches(byte[] persisted) {
-            try {
-                ByteArrayInputStream bis = new ByteArrayInputStream(persisted);
-                java.io.DataInputStream dis = new java.io.DataInputStream(bis);
-
-                Entity entity = byteToEntity(dis);
-
-                return entity.getMBStatus() != DBStatusType.SYNCHRONIZED;
-            } catch (Exception ex) {
-                AlertRMS.setTextAlert("RecordFilterNotSinchronized ERROR: ");
-                AlertRMS.setTextAlertException(ex.getMessage());
-                AlertRMS.show();
-                ex.printStackTrace();
-                return false;
-            }
-        }
-    }
-
     /*
-    public class ComparatorIndex implements RecordComparator {
-        public int compare(byte[] rec1, byte[] rec2) {
-            int val1 = ((rec1[0] << 24) & 0xFF000000)
-                     + ((rec1[1] << 16) & 0x00FF0000)
-                     + ((rec1[2] << 8)  & 0x0000FF00)
-                     + ((rec1[3] << 0)  & 0x000000FF);;
-            int val2 = ((rec2[0] << 24) & 0xFF000000)
-                     + ((rec2[1] << 16) & 0x00FF0000)
-                     + ((rec2[2] << 8)  & 0x0000FF00)
-                     + ((rec2[3] << 0)  & 0x000000FF);;
+     public class ComparatorIndex implements RecordComparator {
+     public int compare(byte[] rec1, byte[] rec2) {
+     int val1 = ((rec1[0] << 24) & 0xFF000000)
+     + ((rec1[1] << 16) & 0x00FF0000)
+     + ((rec1[2] << 8)  & 0x0000FF00)
+     + ((rec1[3] << 0)  & 0x000000FF);;
+     int val2 = ((rec2[0] << 24) & 0xFF000000)
+     + ((rec2[1] << 16) & 0x00FF0000)
+     + ((rec2[2] << 8)  & 0x0000FF00)
+     + ((rec2[3] << 0)  & 0x000000FF);;
 
-            if (val1 == val2)
-                return RecordComparator.EQUIVALENT;
-            else
-                if (val1 > val2)
-                    return RecordComparator.FOLLOWS;
-                    //return RecordComparator.PRECEDES;
-                else
-                    return RecordComparator.PRECEDES;
-                    //return RecordComparator.FOLLOWS;
-        }
-    }
+     if (val1 == val2)
+     return RecordComparator.EQUIVALENT;
+     else
+     if (val1 > val2)
+     return RecordComparator.FOLLOWS;
+     //return RecordComparator.PRECEDES;
+     else
+     return RecordComparator.PRECEDES;
+     //return RecordComparator.FOLLOWS;
+     }
+     }
      */
 }

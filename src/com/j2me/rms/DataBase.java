@@ -30,12 +30,16 @@ public class DataBase {
             AlertRMS.setTextAlert("DataBase name "+ dataBaseName +" ERROR: ");
             AlertRMS.setTextAlertException(rEx.getMessage());
             AlertRMS.show();
+            //#mdebug error
             rEx.printStackTrace();
+            //#enddebug
         } catch (RecordStoreException ex) {
             AlertRMS.setTextAlert("DataBase name "+dataBaseName+" ERROR: ");
             AlertRMS.setTextAlertException(ex.getMessage());
             AlertRMS.show();
+            //#mdebug error
             ex.printStackTrace();
+            //#enddebug
         }
     }
 
@@ -46,17 +50,23 @@ public class DataBase {
             AlertRMS.setTextAlert("closeDataBase ERROR: ");
             AlertRMS.setTextAlertException(rEx.getMessage());
             AlertRMS.show();
+            //#mdebug error
             rEx.printStackTrace();
+            //#enddebug
         } catch (RecordStoreNotOpenException ex) {
             AlertRMS.setTextAlert("closeDataBase ERROR: ");
             AlertRMS.setTextAlertException(ex.getMessage());
             AlertRMS.show();
+            //#mdebug error
             ex.printStackTrace();
+            //#enddebug
         } catch (RecordStoreException ex) {
             AlertRMS.setTextAlert("closeDataBase ERROR: ");
             AlertRMS.setTextAlertException(ex.getMessage());
             AlertRMS.show();
+            //#mdebug error
             ex.printStackTrace();
+            //#enddebug
         }
     }
 
@@ -75,19 +85,25 @@ public class DataBase {
             AlertRMS.setTextAlert("addRecord ERROR: ");
             AlertRMS.setTextAlertException(rEx.getMessage());
             AlertRMS.show();
+            //#mdebug error
             rEx.printStackTrace();
+            //#enddebug
             return -1;
         } catch (RecordStoreNotOpenException ex) {
             AlertRMS.setTextAlert("addRecord ERROR: ");
             AlertRMS.setTextAlertException(ex.getMessage());
             AlertRMS.show();
+            //#mdebug error
             ex.printStackTrace();
+            //#enddebug
             return -1;
         } catch (RecordStoreException ex) {
             AlertRMS.setTextAlert("addRecord ERROR: ");
             AlertRMS.setTextAlertException(ex.getMessage());
             AlertRMS.show();
+            //#mdebug error
             ex.printStackTrace();
+            //#enddebug
             return -1;
         }
     }
@@ -100,19 +116,25 @@ public class DataBase {
             AlertRMS.setTextAlert("updateRecord ERROR: ");
             AlertRMS.setTextAlertException(rEx.getMessage());
             AlertRMS.show();
+            //#mdebug error
             rEx.printStackTrace();
+            //#enddebug
             return false;
         } catch (RecordStoreNotOpenException ex) {
             AlertRMS.setTextAlert("updateRecord ERROR: ");
             AlertRMS.setTextAlertException(ex.getMessage());
             AlertRMS.show();
+            //#mdebug error
             ex.printStackTrace();
+            //#enddebug
             return false;
         } catch (RecordStoreException ex) {
             AlertRMS.setTextAlert("updateRecord ERROR: ");
             AlertRMS.setTextAlertException(ex.getMessage());
             AlertRMS.show();
+            //#mdebug error
             ex.printStackTrace();
+            //#enddebug
             return false;
         }
     }
@@ -125,25 +147,33 @@ public class DataBase {
             AlertRMS.setTextAlert("deleteRecord ERROR: ");
             AlertRMS.setTextAlertException(rEx.getMessage());
             AlertRMS.show();
+            //#mdebug error
             rEx.printStackTrace();
+            //#enddebug
             return false;
         } catch (RecordStoreNotOpenException ex) {
             AlertRMS.setTextAlert("deleteRecord ERROR: ");
             AlertRMS.setTextAlertException(ex.getMessage());
             AlertRMS.show();
+            //#mdebug error
             ex.printStackTrace();
+            //#enddebug
             return false;
         } catch (InvalidRecordIDException ex) {
             AlertRMS.setTextAlert("deleteRecord ERROR: ");
             AlertRMS.setTextAlertException(ex.getMessage());
             AlertRMS.show();
+            //#mdebug error
             ex.printStackTrace();
+            //#enddebug
             return false;
         } catch (RecordStoreException ex) {
             AlertRMS.setTextAlert("deleteRecord ERROR: ");
             AlertRMS.setTextAlertException(ex.getMessage());
             AlertRMS.show();
+            //#mdebug error
             ex.printStackTrace();
+            //#enddebug
             return false;
         }
     }
@@ -154,11 +184,13 @@ public class DataBase {
         if(RecordStore.listRecordStores() != null){
             try {
                 RecordStore.deleteRecordStore(nameRecordStore);
-            } catch (Exception e) {
+            } catch (RecordStoreException e) {
                 AlertRMS.setTextAlert("deleteRecord ERROR: ");
                 AlertRMS.setTextAlertException(e.getMessage());
                 AlertRMS.show();
+                //#mdebug error
                 e.printStackTrace();
+                //#enddebug
             }
         }
     }
