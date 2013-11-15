@@ -22,6 +22,7 @@ public abstract class Entity {
     public static final String PARAM_SEPARATOR_COLUMN = "|";
     public static final String PARAM_IDENTIFIED = "=";
     
+    private int id;
     private int indexRMS = -1;
     private Object key = null;
     private int MBStatus;
@@ -32,6 +33,14 @@ public abstract class Entity {
 
     public Entity(Object key){
         this.key = key;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getIndexRMS() {

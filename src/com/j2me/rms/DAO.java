@@ -4,6 +4,7 @@
  */
 package com.j2me.rms;
 
+import com.j2me.rms.filter.RecordFilterId;
 import com.j2me.rms.filter.RecordFilterKey;
 import com.j2me.rms.filter.RecordFilterNotSynchronized;
 import com.j2me.rms.filter.RecordFilterSynchronized;
@@ -323,6 +324,10 @@ public abstract class DAO {
             ex.printStackTrace();
             //#enddebug
         }
+    }
+    
+    public void searchById(int id){
+        search(new RecordFilterId(id, this), null);
     }
 
     /**
