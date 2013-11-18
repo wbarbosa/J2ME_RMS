@@ -1,10 +1,26 @@
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
+
+ * Project in Java ME for Reading and Writing RMS.
+ * Copyright (C) 2013  Willian Lemos Barbosa
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 package com.j2me.rms;
 
-import com.j2me.rms.filter.RecordFilterId;
 import com.j2me.rms.filter.RecordFilterKey;
 import com.j2me.rms.filter.RecordFilterNotSynchronized;
 import com.j2me.rms.filter.RecordFilterSynchronized;
@@ -22,10 +38,12 @@ import javax.microedition.rms.RecordFilter;
 import javax.microedition.rms.RecordStore;
 import javax.microedition.rms.RecordStoreException;
 import javax.microedition.rms.RecordStoreNotOpenException;
+import com.j2me.rms.filter.RecordFilterId;
 
 /**
  *
- * @author willian
+ * @author Willian Lemos Barbosa
+ * @contact willian.lemos@gmail.com
  */
 public abstract class DAO {
 
@@ -324,12 +342,10 @@ public abstract class DAO {
             ex.printStackTrace();
             //#enddebug
         }
-    }
-    
+    }    
     public void searchById(int id){
         search(new RecordFilterId(id, this), null);
     }
-
     /**
      * Search all records
      */

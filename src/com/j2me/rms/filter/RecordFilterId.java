@@ -5,7 +5,6 @@
 package com.j2me.rms.filter;
 
 import com.j2me.rms.DAO;
-import com.j2me.rms.DBStatusType;
 import com.j2me.rms.Entity;
 import com.j2me.rms.ui.AlertRMS;
 import java.io.ByteArrayInputStream;
