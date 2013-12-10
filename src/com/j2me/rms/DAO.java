@@ -342,7 +342,8 @@ public abstract class DAO {
             ex.printStackTrace();
             //#enddebug
         }
-    }    
+    }   
+    
     public void searchById(int id){
         search(new RecordFilterId(id, this), null);
     }

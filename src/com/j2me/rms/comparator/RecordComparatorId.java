@@ -42,5 +42,4 @@ public class RecordComparatorId implements RecordComparator {
             return RecordComparator.PRECEDES;
         }
     }
-    
 }
